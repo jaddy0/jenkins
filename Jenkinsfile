@@ -8,7 +8,7 @@ pipeline{
     stage(S3 create Bucket){
       steps{
         script{
-          getTerraformPath('terraform-statefile2021  ')
+          createS3Bucket('terraform-statefile2021  ')
         }
       }
     }
