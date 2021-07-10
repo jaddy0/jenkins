@@ -4,6 +4,14 @@ pipeline{
     PATH = "${PATH}:${getTerraformPath()}"
   }
   stages{
+
+    stage(S3 create Bucket){
+      steps{
+        script{
+          getTerraformPath('terraform-statefile2021  ')
+        }
+      }
+    }
     stage('terraform init and apply - dev'){
       steps {
         sh returnStatus: true, script: 'terraform workspace new dev'
@@ -12,17 +20,21 @@ pipeline{
     }
   }
 
-  stage('terraform init and apply - prod'){
-    steps {
-      sh returnStatus: true, script: 'terraform workspace new prod'
-      sh "terraform init"
-      sh "terraform apply -var-file=prod.tfvars --auto-approve"
+    stage('terraform init and apply - prod'){
+      steps {
+        sh returnStatus: true, script: 'terraform workspace new prod'
+        sh "terraform init"
+        sh "terraform apply -var-file=prod.tfvars --auto-approve"
+      }
+    }
   }
-}
- }
 }
 
 def getTerraformPath(){
   def tfHome = tool name: 'terraform-12', type: 'terraform'
   return tfHome
+}
+
+def createS3Bucket(bucketName){
+  sh 'aws s3 mb bucket-name --region=us-east-1'
 }
