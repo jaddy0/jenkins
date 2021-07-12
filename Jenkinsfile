@@ -11,19 +11,20 @@ pipeline{
         }
       }
     }
-    stage('terraform init and apply - dev'){
+  stage('terraform init and apply - dev'){
       steps {
         sh returnStatus: true, script: 'terraform workspace new dev'
         sh "terraform init"
         sh "terraform apply -var-file=dev.tfvars --auto-approve"
+        sh "terraform destroy --auto-approve"
     }
   }
-
     stage('terraform init and apply - prod'){
       steps {
         sh returnStatus: true, script: 'terraform workspace new prod'
         sh "terraform init"
         sh "terraform apply -var-file=prod.tfvars --auto-approve"
+        sh "terraform destroy --auto-approve"
       }
     }
     stage('terraform destroy - dev and prod'){
