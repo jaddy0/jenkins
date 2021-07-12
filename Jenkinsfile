@@ -26,17 +26,11 @@ pipeline{
         sh "terraform apply -var-file=prod.tfvars --auto-approve"
       }
     }
-    stage('terraform init and destroy - dev'){
+    stage('terraform destroy - dev and prod'){
       steps {
-#       sh returnStatus: true, script: 'terraform workspace new dev'
         sh "terraform workspace select dev"
         sh "terraform init"
         sh "terraform destroy --auto-approve"
-      }
-    }
-    stage('terraform init and destroy - prod'){
-      steps {
-#       sh returnStatus: true, script: 'terraform workspace new dev'
         sh "terraform workspace select prod"
         sh "terraform init"
         sh "terraform destroy --auto-approve"
