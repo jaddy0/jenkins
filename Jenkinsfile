@@ -28,16 +28,18 @@ pipeline{
     }
     stage('terraform init and destroy - dev'){
       steps {
-        sh returnStatus: true, script: 'terraform workspace new dev'
+#       sh returnStatus: true, script: 'terraform workspace new dev'
+        sh "terraform workspace select dev"
         sh "terraform init"
         sh "terraform destroy --auto-approve"
       }
     }
     stage('terraform init and destroy - prod'){
       steps {
-        sh returnStatus: true, script: 'terraform workspace new prod'
+#       sh returnStatus: true, script: 'terraform workspace new dev'
+        sh "terraform workspace select prod"
         sh "terraform init"
-        sh "terraform apply --auto-approve"
+        sh "terraform destroy --auto-approve"
       }
     }
   }
